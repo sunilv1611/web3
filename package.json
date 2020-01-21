@@ -1,6 +1,6 @@
 {
   "name": "web3-functions",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "contains Fantom web3 functions",
   "main": "index.js",
   "scripts": {
