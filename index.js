@@ -359,3 +359,25 @@ const getAccount = async (address) => {
 // const Fantom = new Web3Agent();
 
 // module.exports.Fantom = Fantom;
+
+module.exports.getBalance = getBalance
+module.exports.privateKeyToKeys = privateKeyToKeys
+module.exports.delegateUnstake = delegateUnstake
+module.exports.isConnected = isConnected
+module.exports.setProvider = setProvider
+module.exports.getDelegate = getDelegate
+module.exports.validateKeystore = validateKeystore
+module.exports.getPrivateKey = getPrivateKey
+module.exports.getCurrentEpoch = getCurrentEpoch
+module.exports.estimateFee = estimateFee
+module.exports.getDelegationPendingRewards = getDelegationPendingRewards
+module.exports.delegateStake = delegateStake
+module.exports.restoreWallet = restoreWallet
+module.exports.getTransactionFee = getTransactionFee
+module.exports.transfer = transfer
+module.exports.delegateUnstake = delegateUnstake
+module.exports.withdrawDelegateAmount = withdrawDelegateAmount
+module.exports.mnemonicToKeys = mnemonicToKeys
+module.exports.getAccount = getAccount
+
+
