@@ -274,8 +274,14 @@ const transfer = async ({
 		nonce: Web3.utils.toHex(nonce),
 		data: memo
 	};
+	console.log(new Buffer(privateKey), '****sdkksdfk')
+
+
+	console.log('*****privateKey', privateKey, typeof privateKey)
+
 
 	const privateKeyBuffer = EthUtil.toBuffer(privateKey);
+	console.log(privateKeyBuffer, '****privateKeyBuffer')
 	const tx = new Tx(rawTx);
 	tx.sign(privateKeyBuffer);
 	const serializedTx = tx.serialize();
