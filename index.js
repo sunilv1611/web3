@@ -279,8 +279,9 @@ const transfer = async ({
 
 	console.log('*****privateKey', privateKey, typeof privateKey)
 
-
-	const privateKeyBuffer = EthUtil.toBuffer(privateKey);
+	const bufferData = EthUtil.addHexPrefix(privateKey)
+	console.log(bufferData, '****sdjasdj')
+	const privateKeyBuffer = EthUtil.toBuffer(bufferData);
 	console.log(privateKeyBuffer, '****privateKeyBuffer')
 	const tx = new Tx(rawTx);
 	tx.sign(privateKeyBuffer);
