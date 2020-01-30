@@ -3,8 +3,8 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx').Transaction;
 const EthUtil = require('ethereumjs-util');
-const Bip39 = require('web3');
-const Hdkey = require('bip39');
+const Bip39 = require('bip39');
+const Hdkey = require('hdkey');
 const { EncryptedKeystoreV3Json } = require('web3-core');
 // const { IAccount, INodeRecord } from '~/redux/account/types';
 const keythereum = require('keythereum');
@@ -12,8 +12,9 @@ const BigInt = require('big-integer');
 const { contractFunctions } = require('./constants');
 require('dotenv').config({ path: __dirname + '/.env' })
 
-
-const { REACT_APP_API_URL_FANTOM, REACT_APP_API_URL_WEB3, API_URL_FANTOM, KEY_INFURA } = process.env;
+const REACT_APP_API_URL_WEB3 = 'https://rpc.fantom.network/'
+const REACT_APP_API_URL_FANTOM = 'https://api.fantom.network/api/v1/'
+const { API_URL_FANTOM, KEY_INFURA } = process.env;
 console.log('*****ssfds', REACT_APP_API_URL_FANTOM, REACT_APP_API_URL_WEB3, API_URL_FANTOM, KEY_INFURA)
 // export const DEFAULT_PROVIDERS: INodeRecord[] = [
 //   { address: REACT_APP_API_URL_WEB3 || '' },
@@ -368,6 +369,7 @@ const getAccount = async (address) => {
 // module.exports.Fantom = Fantom;
 
 module.exports.getBalance = getBalance
+module.exports.getKeystore = getKeystore
 module.exports.privateKeyToKeys = privateKeyToKeys
 module.exports.delegateUnstake = delegateUnstake
 module.exports.isConnected = isConnected
