@@ -272,7 +272,7 @@ const transfer = async ({
 		gasLimit: Web3.utils.toHex(gasLimit),
 		gasPrice: Web3.utils.toHex(gasPrice),
 		nonce: Web3.utils.toHex(nonce),
-		data: memo
+		data: `0x${memo}`
 	};
 	console.log(new Buffer(privateKey), '****sdkksdfk')
 
@@ -281,7 +281,7 @@ const transfer = async ({
 
 	const bufferData = EthUtil.addHexPrefix(privateKey)
 	console.log(bufferData, '****sdjasdj')
-	const privateKeyBuffer = EthUtil.toBuffer(bufferData);
+	const privateKeyBuffer = EthUtil.toBuffer(privateKey);
 	console.log(privateKeyBuffer, '****privateKeyBuffer')
 	const tx = new Tx(rawTx);
 	tx.sign(privateKeyBuffer);
