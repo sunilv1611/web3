@@ -203,7 +203,7 @@ const getDelegationPendingRewards = async (from, delegateAddress) => {
 	});
 }
 
-const delegateStake = ({ amount, publicKey, privateKey, validatorId }) => {
+const delegateStake = ({ amount, publicKey, privateKey, validatorId, isWeb = false }) => {
 	console.log(amount, publicKey, privateKey, validatorId, '******8amount, publicKey, privateKey, validatorId');
 
 	const web3 = new Web3(new Web3.providers.HttpProvider(REACT_APP_API_URL_WEB3 || ''));
@@ -228,7 +228,8 @@ const delegateStake = ({ amount, publicKey, privateKey, validatorId }) => {
 		memo: web3Sfc.methods.createDelegation(validatorId).encodeABI(),
 		privateKey,
 		gasLimit: 200000,
-		web3Delegate: web3
+		web3Delegate: web3,
+		isWeb
 		// cb: data,
 	});
 	// this.sfc.stakersNum(); // if everything is all right, will return non-zero value
@@ -257,7 +258,8 @@ const transfer = async ({
 	memo = '',
 	privateKey,
 	gasLimit = 44000,
-	web3Delegate = ''
+	web3Delegate = '',
+	isWeb
 }) => {
 	const useWeb3 = web3Delegate || web3;
 	const nonce = await useWeb3.eth.getTransactionCount(from);
@@ -286,14 +288,18 @@ const transfer = async ({
 	tx.sign(privateKeyBuffer);
 	const serializedTx = tx.serialize();
 	const res = await useWeb3.eth.sendSignedTransaction(`0x${serializedTx.toString('hex')}`);
-	localStorage.setItem('txHash', res.transactionHash);
+	if (isWeb) {
+		localStorage.setItem('txHash', res.transactionHash);
+
+
+	}
 	// if (cb) {
 	//   cb(res.transactionHash || '')
 	// }
 	return res;
 }
 
-const delegateUnstake = async (publicKey, privateKey) => {
+const delegateUnstake = async (publicKey, privateKey, isWeb = false) => {
 	const web3 = new Web3(new Web3.providers.HttpProvider(REACT_APP_API_URL_WEB3 || ''));
 	const web3Sfc = new web3.eth.Contract(contractFunctions, '0xfc00face00000000000000000000000000000000');
 	return transfer({
@@ -303,12 +309,13 @@ const delegateUnstake = async (publicKey, privateKey) => {
 		memo: web3Sfc.methods.prepareToWithdrawDelegation().encodeABI(),
 		privateKey,
 		gasLimit: 200000,
-		web3Delegate: web3
+		web3Delegate: web3,
+		isWeb
 		// cb: () => '',
 	});
 }
 
-const withdrawDelegateAmount = async (publicKey, privateKey) => {
+const withdrawDelegateAmount = async (publicKey, privateKey, isWeb = false) => {
 	const web3 = new Web3(new Web3.providers.HttpProvider(REACT_APP_API_URL_WEB3 || ''));
 
 	const web3Sfc = new web3.eth.Contract(contractFunctions, '0xfc00face00000000000000000000000000000000');
@@ -319,7 +326,8 @@ const withdrawDelegateAmount = async (publicKey, privateKey) => {
 		memo: web3Sfc.methods.withdrawDelegation().encodeABI(),
 		privateKey,
 		gasLimit: 200000,
-		web3Delegate: web3
+		web3Delegate: web3,
+		isWeb,
 		// cb: () => '',
 	});
 }
@@ -354,8 +362,8 @@ const getAccount = async (address) => {
 
 const estimateFeeMobile = async (value) => {
 	let fee;
-	if (this.web3 && this.web3.eth) {
-		const gasPrice = await this.web3.eth.getGasPrice();
+	if (web3 && web3.eth) {
+		const gasPrice = await web3.eth.getGasPrice();
 		const gasLimit = value;
 		fee = Web3.utils.fromWei(
 			BigInt(gasPrice.toString())
