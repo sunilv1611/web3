@@ -10,12 +10,10 @@ const { EncryptedKeystoreV3Json } = require('web3-core');
 const keythereum = require('keythereum');
 const BigInt = require('big-integer');
 const { contractFunctions } = require('./constants');
-require('dotenv').config({ path: __dirname + '/.env' })
 
 const REACT_APP_API_URL_WEB3 = 'https://rpc.fantom.network/'
 const REACT_APP_API_URL_FANTOM = 'https://api.fantom.network/api/v1/'
 const { API_URL_FANTOM, KEY_INFURA } = process.env;
-console.log('*****ssfds', REACT_APP_API_URL_FANTOM, REACT_APP_API_URL_WEB3, API_URL_FANTOM, KEY_INFURA)
 // export const DEFAULT_PROVIDERS: INodeRecord[] = [
 //   { address: REACT_APP_API_URL_WEB3 || '' },
 //   { address: 'ws://18.189.195.64:4501' },
@@ -273,7 +271,7 @@ const transfer = async ({
 		gasLimit: Web3.utils.toHex(gasLimit),
 		gasPrice: Web3.utils.toHex(gasPrice),
 		nonce: Web3.utils.toHex(nonce),
-		data: `0x${memo}`
+		data: memo
 	};
 	console.log(new Buffer(privateKey), '****sdkksdfk')
 
@@ -326,8 +324,8 @@ const withdrawDelegateAmount = async (publicKey, privateKey) => {
 	});
 }
 
-const mnemonicToKeys = (mnemonic) => {
-	const seed = Bip39.mnemonicToSeed(mnemonic);
+const mnemonicToKeys = async (mnemonic) => {
+	const seed = await Bip39.mnemonicToSeed(mnemonic);
 	const root = Hdkey.fromMasterSeed(seed);
 
 	const addrNode = root.derive("m/44'/60'/0'/0/0");
@@ -354,6 +352,20 @@ const getAccount = async (address) => {
 	return await fetch(`${REACT_APP_API_URL_FANTOM}api/v1/get-account?address=${address}`);
 }
 
+const estimateFeeMobile = async (value) => {
+	let fee;
+	if (this.web3 && this.web3.eth) {
+		const gasPrice = await this.web3.eth.getGasPrice();
+		const gasLimit = value;
+		fee = Web3.utils.fromWei(
+			BigInt(gasPrice.toString())
+				.multiply(BigInt(gasLimit.toString()))
+				.toString()
+		);
+	}
+	return fee;
+}
+
 // from debug network
 /* eslint-disable no-undef */
 // $FlowFixMe
@@ -367,7 +379,7 @@ const getAccount = async (address) => {
 // const Fantom = new Web3Agent();
 
 // module.exports.Fantom = Fantom;
-
+module.exports.estimateFeeMobile = estimateFeeMobile
 module.exports.getBalance = getBalance
 module.exports.getKeystore = getKeystore
 module.exports.privateKeyToKeys = privateKeyToKeys
